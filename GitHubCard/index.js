@@ -1,10 +1,25 @@
+import axios from "axios";
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
 
-/*
+for (let i = 0; i < followersArray.length; i++){
+  getGitCard(followersArray[i]); 
+}
+
+function gitCard(username) {
+  axios.get(`https://api.github.com/users/${username}`)
+  .then(resp => {
+    document.querySelector('.cards').appendChild(cardCreator(resp.data));
+  })
+  .catch(err => console.error(err));  
+}
+
+  
+  /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
     data in order to use it to build your component function
@@ -28,8 +43,51 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
 
+
+function cardCreator() {
+  const card = document.createElement('div');
+  const img = document.createElement('img');
+  const card_info = document.createElement('div'); 
+  const name = document.createElement('h3');
+  const login = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const profileLink = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+
+  card.classList.add('card');
+  card_info.classList.add('card-info'); 
+  name.classList.add('name');
+  login.classList.add('username');
+
+  img.src = gitInfo.avatar_url;
+  img.alt = "github user"; 
+  name.textContent = gitInfo.name;
+  login.textContent = gitInfo.login;
+  location.textContent = gitInfo.location;
+  profile.textContent = "Profile";
+  profileLink.textContent ="Link to profile";
+  profileLink.href = gitInfo.html_url;
+  followers.textContent = `Followers: ${gitInfo.followers}`;
+  following.textContent = `Following: ${gitInfo.following}`;
+  bio.textContent = gitInfo.bio;
+
+  card.appendChild(img);
+  card.appendChild(card_info);
+  card_info.appendChild(name);
+  card_info.appendChild(login);
+  card_info.appendChild(location);
+  card_info.appendChild(profile);
+  profile.appendChild(profileLink);
+  card_info.appendChild(followers);
+  card_info.appendChild(following);
+  card_info.appendChild(bio); 
+
+  return card;
+}
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
